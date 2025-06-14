@@ -12,5 +12,5 @@ import {Gif} from '../../interfaces/gif.interface';
   styles: ``
 })
 export class GifListComponent {
-  trendingGifs = input.required<Gif[]>();
+  gifsList = input.required<Gif[]>();
 }

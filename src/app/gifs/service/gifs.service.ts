@@ -3,7 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {GifResponse} from '../interfaces/gif-response.interface';
 import {environment} from '../../../environments/environment';
 import {Gif} from '../interfaces/gif.interface';
-import {map} from 'rxjs';
+import {map, Observable} from 'rxjs';
+import {GifsHelper} from '../../shared/gifs.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class GifsService {
   trendingGifs = signal<Gif[]>([]);
   trendigGifsLoading = signal<boolean>(true);
 
-  loadTrendingGifs() {
+  loadTrendingGifs(): void {
     this.http.get<GifResponse>(`${environment.GIPHY_URL}/gifs/trending`, {
       params: {
         api_key: environment.API_KEY_GIPHY,
@@ -26,16 +27,25 @@ export class GifsService {
       }
     }).pipe(
       map(({data}) =>
-        data.map(gif => ({
-          id: gif.id,
-          title: gif.title,
-          url: gif.images.original.url
-        } as Gif))
+        GifsHelper.transformToGif(data)
       )
     ).subscribe((gifs) => {
-      console.log('gifs => ', gifs);
       this.trendingGifs.set(gifs);
       this.trendigGifsLoading.set(false);
     });
+  }
+
+  searchGifs(query: string): Observable<Gif[]> {
+    return this.http.get<GifResponse>(`${environment.GIPHY_URL}/gifs/search`, {
+      params: {
+        api_key: environment.API_KEY_GIPHY,
+        limit: 20,
+        q: query
+      }
+    }).pipe(
+      map(({data}) =>
+        GifsHelper.transformToGif(data)
+      )
+    )
   }
 }
