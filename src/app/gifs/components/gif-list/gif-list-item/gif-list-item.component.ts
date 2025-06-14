@@ -8,5 +8,5 @@ import {Component, input} from '@angular/core';
   styles: ``
 })
 export class GifListItemComponent {
-  imgUrl = input.required<string>();
+  gifUrl = input.required<string>();
 }
