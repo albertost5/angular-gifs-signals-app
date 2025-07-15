@@ -1,6 +1,6 @@
 import {Component, inject, signal} from '@angular/core';
 import {GifListComponent} from '@gifs/components/gif-list/gif-list.component';
-import {GifsService} from '../../service/gifs.service';
+import {GifsService} from '../../services/gifs.service';
 
 // const imageUrls: string[] = [
 //   "https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg",

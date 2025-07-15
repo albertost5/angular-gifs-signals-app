@@ -19,7 +19,7 @@ export class GifsService {
   trendingGifs = signal<Gif[]>([]);
   trendigGifsLoading = signal<boolean>(true);
   searchHistory = signal<Record<string, Gif[]>>({});
-  searchHistoryKeys = computed(() => Object.keys(this.searchHistory()))
+  searchHistoryKeys = computed(() => Object.keys(this.searchHistory()));
 
   loadTrendingGifs(): void {
     this.http.get<GifResponse>(`${environment.GIPHY_URL}/gifs/trending`, {
@@ -51,9 +51,13 @@ export class GifsService {
       tap((gifs) => {
         this.searchHistory.update((history) => ({
           ...history,
-          [query]: gifs
+          [query.toLowerCase()]: gifs
         }))
       })
     )
+  }
+
+  getHistoryGifs(query: string): Gif[] {
+   return this.searchHistory()[query]
   }
 }
